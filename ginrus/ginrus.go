@@ -18,7 +18,7 @@ import (
 // It receives:
 //   1. A time package format string (e.g. time.RFC3339).
 //   2. A boolean stating whether to use UTC time zone or local.
-func Ginrus(logger *logrus.Logger, timeFormat string, utc bool) gin.HandlerFunc {
+func Ginrus(logger *logrus.Logger, timeFormat string, utc bool, appName string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		start := time.Now()
 		// some evil middlewares modify this values
@@ -37,6 +37,8 @@ func Ginrus(logger *logrus.Logger, timeFormat string, utc bool) gin.HandlerFunc 
 			"path":       path,
 			"ip":         c.ClientIP(),
 			"latency":    latency,
+			"app":        appName,
+			"handler":    c.Handler(),
 			"user-agent": c.Request.UserAgent(),
 			"time":       end.Format(timeFormat),
 		})
